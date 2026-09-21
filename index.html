@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Read Aloud</title>
+<meta name="description" content="Paste text or Markdown and have it read aloud. Double-click any word to start reading from there.">
+<meta name="theme-color" content="#2B45F0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%A7%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1 class="brand">Read Aloud</h1>
+    <span id="count"></span>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tabPaste" aria-selected="true">Paste text</button>
+    <button role="tab" id="tabListen" aria-selected="false">Listen</button>
+  </div>
+
+  <main>
+    <div class="zoombar">
+      <div class="zoompill" role="group" aria-label="Text size">
+        <button id="zOut" type="button" aria-label="Zoom out" title="Zoom out">A&minus;</button>
+        <button id="zVal" type="button" aria-label="Reset text size" title="Reset text size">100%</button>
+        <button id="zIn" type="button" aria-label="Zoom in" title="Zoom in">A+</button>
+      </div>
+    </div>
+
+    <section id="panePaste">
+      <textarea id="src" placeholder="Paste or type your text or Markdown here, then press Play." spellcheck="false"></textarea>
+      <div class="row">
+        <button class="link" id="sample" type="button">Use sample text</button>
+        <button class="link" id="clear" type="button">Clear</button>
+      </div>
+      <p class="hint">Markdown is understood: # headings, **bold**, *italic*, nested lists, task lists, tables, &gt; quotes and code blocks show up properly on the Listen tab, and the symbols are never read aloud.</p>
+    </section>
+
+    <section id="paneListen" hidden>
+      <div class="paper reader" id="reader"></div>
+      <p class="hint" id="hint">Double-click (or double-tap) any word to start reading from there. Code blocks are shown but not read aloud.</p>
+    </section>
+  </main>
+
+  <div class="dock">
+    <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+
+    <details class="settings">
+      <summary>Voice and timing</summary>
+      <div class="fields">
+        <label class="field wide">Voice (starred voices sound the most natural)
+          <select id="voice"></select>
+        </label>
+        <p class="tip" id="voiceTip" hidden>This device only offers basic voices. For a friendlier, more natural sound, open this page in Microsoft Edge and pick a voice marked "Natural", or in Chrome and pick a "Google" voice. On iPhone or Mac, add an Enhanced voice in Settings &gt; Accessibility &gt; Spoken Content &gt; Voices.</p>
+        <label class="field">Speed <b id="rateVal">0.95&times;</b>
+          <input type="range" id="rate" min="0.6" max="1.8" step="0.05" value="0.95">
+        </label>
+        <label class="field">Pause length <b id="pauseVal">1&times;</b>
+          <input type="range" id="pauseScale" min="0" max="2.5" step="0.25" value="1">
+        </label>
+        <label class="field">Tone (higher is brighter) <b id="pitchVal">1.05</b>
+          <input type="range" id="pitch" min="0.8" max="1.4" step="0.05" value="1.05">
+        </label>
+        <label class="field check">
+          <input type="checkbox" id="linePause" checked> Pause at line breaks
+        </label>
+      </div>
+    </details>
+
+    <div class="controls">
+      <button class="btn" id="restart" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+        Restart
+      </button>
+      <button class="btn primary" id="play" type="button">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>
+        <span id="playLabel">Play</span>
+      </button>
+      <button class="btn" id="pause" type="button" disabled>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4.5" height="16" rx="1.2"/><rect x="13.5" y="4" width="4.5" height="16" rx="1.2"/></svg>
+        Pause
+      </button>
+      <div class="status" id="status" role="status" aria-live="polite">Ready</div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
